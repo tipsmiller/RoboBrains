@@ -204,7 +204,7 @@ public class JavaCamera2View extends CameraBridgeViewBase {
                         mCaptureSession = cameraCaptureSession;
                         try {
                             mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AF_MODE,
-                                    CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
+                                    CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_VIDEO);
                             mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AE_MODE,
                                     CaptureRequest.CONTROL_AE_MODE_ON_AUTO_FLASH);
 
@@ -262,8 +262,8 @@ public class JavaCamera2View extends CameraBridgeViewBase {
             int bestWidth = 0, bestHeight = 0;
             float aspect = (float) width / height;
             android.util.Size[] sizes = map.getOutputSizes(ImageReader.class);
-            bestWidth = sizes[0].getWidth();
-            bestHeight = sizes[0].getHeight();
+            //bestWidth = sizes[0].getWidth();
+            //bestHeight = sizes[0].getHeight();
             for (android.util.Size sz : sizes) {
                 int w = sz.getWidth(), h = sz.getHeight();
                 Log.d(LOGTAG, "trying size: " + w + "x" + h);
@@ -336,7 +336,7 @@ public class JavaCamera2View extends CameraBridgeViewBase {
                 Imgproc.cvtColor(mYuvFrameData, mRgba, Imgproc.COLOR_YUV2RGB_I420, 4); // COLOR_YUV2RGBA_YV12 produces inverted colors
             else if (mPreviewFormat == ImageFormat.YUV_420_888) {
                 assert (mUVFrameData != null);
-                Imgproc.cvtColorTwoPlane(mYuvFrameData, mUVFrameData, mRgba, Imgproc.COLOR_YUV2RGBA_NV21);
+                Imgproc.cvtColorTwoPlane(mYuvFrameData, mUVFrameData, mRgba, Imgproc.COLOR_YUV420sp2BGR);
             } else
                 throw new IllegalArgumentException("Preview Format can be NV21 or YV12");
 
