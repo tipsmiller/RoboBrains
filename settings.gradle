@@ -1,2 +1,2 @@
 include ':app', ':opencv'
-project(':opencv').projectDir = new File(opencvsdk)
+project(':opencv').projectDir = new File('opencv/sdk')

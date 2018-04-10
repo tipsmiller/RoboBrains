@@ -1,5 +1,10 @@
 apply plugin: 'com.android.application'
 
+//Be sure to set opencv.dir in local.properties file
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+def opencvDir = properties.getProperty('opencv.dir')
+
 android {
     compileSdkVersion 27
     defaultConfig {
@@ -12,7 +17,7 @@ android {
         externalNativeBuild {
             cmake {
                 cppFlags "-std=c++11 -frtti -fexceptions"
-                arguments "-DOpenCV_DIR=" + opencvsdk + "\\native\\jni -DANDROID_ARM_NEON=TRUE"
+                arguments "-DOpenCV_DIR=" + opencvDir + "/native/jni", "-DANDROID_ARM_NEON=TRUE"
             }
         }
     }
@@ -38,7 +43,7 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'

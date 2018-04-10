@@ -43,6 +43,7 @@ target_link_libraries( # Specifies the target library.
                        # included in the NDK.
                        ${log-lib} )
 
-set(OpenCV_DIR "F:/OpenCV/OpenCV-android-sdk/sdk/native/jni")
+# set(OpenCV_DIR "opencv")
+message("OpenCV_DIR: " ${OpenCV_DIR})
 find_package(OpenCV 3.4 REQUIRED java)
 target_link_libraries(native-lib ${OpenCV_LIBRARIES})
