@@ -82,7 +82,7 @@ public class CameraViewActivity extends Activity implements CameraBridgeViewBase
                     mOpenCvCameraView.enableView();
 
                     try{
-                        InputStream is = getResources().openRawResource(R.raw.soccer_classifier);
+                        InputStream is = getResources().openRawResource(R.raw.cascade);
                         File cascadeDir = getDir("OpenCV_data", Context.MODE_PRIVATE);
                         mCascadeClassifierFile = new File(cascadeDir, "soccer_classifier.xml");
                         FileOutputStream os = new FileOutputStream(mCascadeClassifierFile);
@@ -148,11 +148,11 @@ public class CameraViewActivity extends Activity implements CameraBridgeViewBase
     }
 
     public void onClickPositive(View view) {
-        mTakeFrame = "positive";
+        mTakeFrame = "positives";
     }
 
     public void onClickNegative(View view) {
-        mTakeFrame = "negative";
+        mTakeFrame = "negatives";
     }
 
     @Override
@@ -163,8 +163,8 @@ public class CameraViewActivity extends Activity implements CameraBridgeViewBase
         mRgba = new Mat(height, width, CvType.CV_8UC4);
         mGray = new Mat(height, width, CvType.CV_8UC1);
         mObjects = new MatOfRect();
-        mObjectMinSize = Math.round(height * 0.1);
-        mObjectMaxSize = Math.round(height * 0.7);
+        mObjectMinSize = 64;
+        mObjectMaxSize = Math.round(height * 0.5);
     }
 
     @Override
@@ -187,7 +187,7 @@ public class CameraViewActivity extends Activity implements CameraBridgeViewBase
         }
 
         if (mCascadeClassifier != null && !mGray.empty()) {
-            mCascadeClassifier.detectMultiScale(mGray, mObjects, 1.5, 1, Objdetect.CASCADE_SCALE_IMAGE,
+            mCascadeClassifier.detectMultiScale(mGray, mObjects, 1.3, 2, Objdetect.CASCADE_SCALE_IMAGE,
                     new Size(mObjectMinSize, mObjectMinSize), new Size(mObjectMaxSize, mObjectMaxSize));
         }
 
