@@ -2,6 +2,7 @@ package xyz.gmiller.robobrains;
 
 import android.app.Activity;
 import android.content.Context;
+import android.hardware.usb.UsbManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -34,8 +35,8 @@ import java.util.Locale;
 import static android.os.Environment.MEDIA_SHARED;
 import static org.opencv.imgcodecs.Imgcodecs.imwrite;
 
-public class CameraViewActivity extends Activity implements CameraBridgeViewBase.CvCameraViewListener2 {
-    private final String TAG = "OCVSample::Activity";
+public class CameraViewActivity extends Activity implements CameraBridgeViewBase.CvCameraViewListener2, Arduino.ArduinoListener {
+    private final String TAG = "RoboBrains::CameraView";
 
     private CameraBridgeViewBase mOpenCvCameraView;
     Mat mRgba;
@@ -46,6 +47,7 @@ public class CameraViewActivity extends Activity implements CameraBridgeViewBase
     long mObjectMinSize, mObjectMaxSize;
     String mTakeFrame;
     SimpleDateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss-SS", Locale.US);
+    Arduino mArduino;
 
     static {
         if (!OpenCVLoader.initDebug()) {
@@ -56,6 +58,12 @@ public class CameraViewActivity extends Activity implements CameraBridgeViewBase
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (!isTaskRoot()) {
+            this.finish();
+            return;
+        }
+
         setContentView(R.layout.activity_camera_view);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -68,8 +76,42 @@ public class CameraViewActivity extends Activity implements CameraBridgeViewBase
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        if (!OpenCVLoader.initDebug()) {
+            Log.d(TAG, "Internal OpenCV library not found. Using OpenCV Manager for initialization");
+        } else {
+            Log.d(TAG, "OpenCV library found inside package. Using it!");
+            mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
+        }
 
         mTakeFrame = null;
+
+        mArduino = new Arduino(this, (UsbManager) getSystemService(Context.USB_SERVICE), this);
+        mArduino.tryConnect();
+    }
+
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        mOpenCvCameraView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+    }
+
+    public void onDestroy() {
+        super.onDestroy();
+        if (mOpenCvCameraView != null)
+            mOpenCvCameraView.disableView();
+        mArduino.destroy();
     }
 
     private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
@@ -113,39 +155,6 @@ public class CameraViewActivity extends Activity implements CameraBridgeViewBase
             }
         }
     };
-
-    @Override
-    public void onPause()
-    {
-        super.onPause();
-        if (mOpenCvCameraView != null)
-            mOpenCvCameraView.disableView();
-    }
-
-    @Override
-    public void onResume()
-    {
-        super.onResume();
-        if (!OpenCVLoader.initDebug()) {
-            Log.d(TAG, "Internal OpenCV library not found. Using OpenCV Manager for initialization");
-        } else {
-            Log.d(TAG, "OpenCV library found inside package. Using it!");
-            mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
-        }
-
-        mOpenCvCameraView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-    }
-
-    public void onDestroy() {
-        super.onDestroy();
-        if (mOpenCvCameraView != null)
-            mOpenCvCameraView.disableView();
-    }
 
     public void onClickPositive(View view) {
         mTakeFrame = "positives";
@@ -192,8 +201,8 @@ public class CameraViewActivity extends Activity implements CameraBridgeViewBase
         }
 
         Rect[] objectsArray = mObjects.toArray();
-        for (int i = 0; i < objectsArray.length; i++)
-            Imgproc.rectangle(mRgba, objectsArray[i].tl(), objectsArray[i].br(), new Scalar(0, 255, 0), 3);
+        for (Rect object : objectsArray)
+            Imgproc.rectangle(mRgba, object.tl(), object.br(), new Scalar(0, 255, 0), 3);
 
         return mRgba;
     }
@@ -218,5 +227,10 @@ public class CameraViewActivity extends Activity implements CameraBridgeViewBase
                 Toast.makeText(this, "Error saving picture", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    @Override
+    public void onMessageReceived(String message) {
+        Log.i(TAG, message);
     }
 }
