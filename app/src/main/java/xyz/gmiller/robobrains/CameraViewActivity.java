@@ -214,6 +214,10 @@ public class CameraViewActivity extends Activity implements CameraBridgeViewBase
                     Toast.makeText(this, "Shared media, cannot write file", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                // create output directory if it doesn't exist
+                File outputDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getPath() + "/" + folder + "/");
+                outputDir.mkdirs();
+                // write the PNG file
                 Mat output = new Mat(frame.rows(), frame.cols(), CvType.CV_8UC3);
                 String outputFile = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getPath() + "/" + folder + "/" + mDateFormat.format(new Date()) + ".png";
                 Imgproc.cvtColor(frame, output, Imgproc.COLOR_RGB2BGR);
