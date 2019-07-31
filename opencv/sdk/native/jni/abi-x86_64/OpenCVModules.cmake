@@ -16,7 +16,7 @@ set(CMAKE_IMPORT_FILE_VERSION 1)
 set(_targetsDefined)
 set(_targetsNotDefined)
 set(_expectedTargets)
-foreach(_expectedTarget libcpufeatures libjpeg libtiff libwebp libjasper libpng IlmImf tbb ippiw libprotobuf ittnotify opencv_core opencv_flann opencv_imgproc opencv_ml opencv_objdetect opencv_photo opencv_video opencv_dnn opencv_imgcodecs opencv_shape opencv_videoio opencv_highgui opencv_superres opencv_features2d opencv_calib3d opencv_java opencv_stitching opencv_videostab)
+foreach(_expectedTarget libcpufeatures libjpeg-turbo libtiff libwebp libjasper libpng IlmImf tbb ippiw libprotobuf quirc ittnotify opencv_core opencv_flann opencv_imgproc opencv_ml opencv_photo opencv_video opencv_dnn opencv_features2d opencv_imgcodecs opencv_shape opencv_videoio opencv_calib3d opencv_highgui opencv_objdetect opencv_stitching opencv_superres opencv_videostab opencv_java)
   list(APPEND _expectedTargets ${_expectedTarget})
   if(NOT TARGET ${_expectedTarget})
     list(APPEND _targetsNotDefined ${_expectedTarget})
@@ -48,8 +48,8 @@ get_filename_component(_IMPORT_PREFIX "${_IMPORT_PREFIX}" PATH)
 # Create imported target libcpufeatures
 add_library(libcpufeatures STATIC IMPORTED)
 
-# Create imported target libjpeg
-add_library(libjpeg STATIC IMPORTED)
+# Create imported target libjpeg-turbo
+add_library(libjpeg-turbo STATIC IMPORTED)
 
 # Create imported target libtiff
 add_library(libtiff STATIC IMPORTED)
@@ -96,6 +96,9 @@ add_library(ippiw STATIC IMPORTED)
 # Create imported target libprotobuf
 add_library(libprotobuf STATIC IMPORTED)
 
+# Create imported target quirc
+add_library(quirc STATIC IMPORTED)
+
 # Create imported target ittnotify
 add_library(ittnotify STATIC IMPORTED)
 
@@ -107,105 +110,119 @@ set_target_properties(ittnotify PROPERTIES
 add_library(opencv_core STATIC IMPORTED)
 
 set_target_properties(opencv_core PROPERTIES
-  INTERFACE_LINK_LIBRARIES "$<LINK_ONLY:dl>;$<LINK_ONLY:m>;$<LINK_ONLY:log>;$<LINK_ONLY:tbb>;$<LINK_ONLY:ippiw>;$<LINK_ONLY:ippicv>;$<LINK_ONLY:z>;$<LINK_ONLY:libcpufeatures>;$<LINK_ONLY:ittnotify>"
+  INTERFACE_LINK_LIBRARIES "$<LINK_ONLY:dl>;$<LINK_ONLY:m>;$<LINK_ONLY:log>;$<LINK_ONLY:ippiw>;$<LINK_ONLY:ippicv>;$<LINK_ONLY:tbb>;$<LINK_ONLY:z>;$<LINK_ONLY:libcpufeatures>;$<LINK_ONLY:ittnotify>"
 )
 
 # Create imported target opencv_flann
 add_library(opencv_flann STATIC IMPORTED)
 
 set_target_properties(opencv_flann PROPERTIES
-  INTERFACE_LINK_LIBRARIES "opencv_core;$<LINK_ONLY:dl>;$<LINK_ONLY:m>;$<LINK_ONLY:log>;$<LINK_ONLY:tbb>;$<LINK_ONLY:ippiw>;$<LINK_ONLY:ippicv>"
+  INTERFACE_LINK_LIBRARIES "opencv_core;$<LINK_ONLY:dl>;$<LINK_ONLY:m>;$<LINK_ONLY:log>;$<LINK_ONLY:ippiw>;$<LINK_ONLY:ippicv>"
 )
 
 # Create imported target opencv_imgproc
 add_library(opencv_imgproc STATIC IMPORTED)
 
 set_target_properties(opencv_imgproc PROPERTIES
-  INTERFACE_LINK_LIBRARIES "opencv_core;$<LINK_ONLY:dl>;$<LINK_ONLY:m>;$<LINK_ONLY:log>;$<LINK_ONLY:tbb>;$<LINK_ONLY:ippiw>;$<LINK_ONLY:ippicv>"
+  INTERFACE_LINK_LIBRARIES "opencv_core;$<LINK_ONLY:dl>;$<LINK_ONLY:m>;$<LINK_ONLY:log>;$<LINK_ONLY:ippiw>;$<LINK_ONLY:ippicv>"
 )
 
 # Create imported target opencv_ml
 add_library(opencv_ml STATIC IMPORTED)
 
 set_target_properties(opencv_ml PROPERTIES
-  INTERFACE_LINK_LIBRARIES "opencv_core;$<LINK_ONLY:dl>;$<LINK_ONLY:m>;$<LINK_ONLY:log>;$<LINK_ONLY:tbb>;$<LINK_ONLY:ippiw>;$<LINK_ONLY:ippicv>"
-)
-
-# Create imported target opencv_objdetect
-add_library(opencv_objdetect STATIC IMPORTED)
-
-set_target_properties(opencv_objdetect PROPERTIES
-  INTERFACE_LINK_LIBRARIES "opencv_core;opencv_imgproc;$<LINK_ONLY:dl>;$<LINK_ONLY:m>;$<LINK_ONLY:log>;$<LINK_ONLY:tbb>;$<LINK_ONLY:ippiw>;$<LINK_ONLY:ippicv>"
+  INTERFACE_LINK_LIBRARIES "opencv_core;$<LINK_ONLY:dl>;$<LINK_ONLY:m>;$<LINK_ONLY:log>;$<LINK_ONLY:ippiw>;$<LINK_ONLY:ippicv>"
 )
 
 # Create imported target opencv_photo
 add_library(opencv_photo STATIC IMPORTED)
 
 set_target_properties(opencv_photo PROPERTIES
-  INTERFACE_LINK_LIBRARIES "opencv_core;opencv_imgproc;$<LINK_ONLY:dl>;$<LINK_ONLY:m>;$<LINK_ONLY:log>;$<LINK_ONLY:tbb>;$<LINK_ONLY:ippiw>;$<LINK_ONLY:ippicv>"
+  INTERFACE_LINK_LIBRARIES "opencv_core;opencv_imgproc;$<LINK_ONLY:dl>;$<LINK_ONLY:m>;$<LINK_ONLY:log>;$<LINK_ONLY:ippiw>;$<LINK_ONLY:ippicv>"
 )
 
 # Create imported target opencv_video
 add_library(opencv_video STATIC IMPORTED)
 
 set_target_properties(opencv_video PROPERTIES
-  INTERFACE_LINK_LIBRARIES "opencv_core;opencv_imgproc;$<LINK_ONLY:dl>;$<LINK_ONLY:m>;$<LINK_ONLY:log>;$<LINK_ONLY:tbb>;$<LINK_ONLY:ippiw>;$<LINK_ONLY:ippicv>"
+  INTERFACE_LINK_LIBRARIES "opencv_core;opencv_imgproc;$<LINK_ONLY:dl>;$<LINK_ONLY:m>;$<LINK_ONLY:log>;$<LINK_ONLY:ippiw>;$<LINK_ONLY:ippicv>"
 )
 
 # Create imported target opencv_dnn
 add_library(opencv_dnn STATIC IMPORTED)
 
 set_target_properties(opencv_dnn PROPERTIES
-  INTERFACE_LINK_LIBRARIES "opencv_core;opencv_imgproc;$<LINK_ONLY:dl>;$<LINK_ONLY:m>;$<LINK_ONLY:log>;$<LINK_ONLY:tbb>;$<LINK_ONLY:ippiw>;$<LINK_ONLY:ippicv>;$<LINK_ONLY:libprotobuf>"
-)
-
-# Create imported target opencv_imgcodecs
-add_library(opencv_imgcodecs STATIC IMPORTED)
-
-set_target_properties(opencv_imgcodecs PROPERTIES
-  INTERFACE_LINK_LIBRARIES "opencv_core;opencv_imgproc;$<LINK_ONLY:dl>;$<LINK_ONLY:m>;$<LINK_ONLY:log>;$<LINK_ONLY:tbb>;$<LINK_ONLY:ippiw>;$<LINK_ONLY:ippicv>;$<LINK_ONLY:z>;$<LINK_ONLY:libjpeg>;$<LINK_ONLY:libwebp>;$<LINK_ONLY:libpng>;$<LINK_ONLY:libtiff>;$<LINK_ONLY:libjasper>;$<LINK_ONLY:IlmImf>"
-)
-
-# Create imported target opencv_shape
-add_library(opencv_shape STATIC IMPORTED)
-
-set_target_properties(opencv_shape PROPERTIES
-  INTERFACE_LINK_LIBRARIES "opencv_core;opencv_imgproc;opencv_video;$<LINK_ONLY:dl>;$<LINK_ONLY:m>;$<LINK_ONLY:log>;$<LINK_ONLY:tbb>;$<LINK_ONLY:ippiw>;$<LINK_ONLY:ippicv>"
-)
-
-# Create imported target opencv_videoio
-add_library(opencv_videoio STATIC IMPORTED)
-
-set_target_properties(opencv_videoio PROPERTIES
-  INTERFACE_LINK_LIBRARIES "opencv_core;opencv_imgproc;opencv_imgcodecs;$<LINK_ONLY:dl>;$<LINK_ONLY:m>;$<LINK_ONLY:log>;$<LINK_ONLY:tbb>;$<LINK_ONLY:ippiw>;$<LINK_ONLY:ippicv>"
-)
-
-# Create imported target opencv_highgui
-add_library(opencv_highgui STATIC IMPORTED)
-
-set_target_properties(opencv_highgui PROPERTIES
-  INTERFACE_LINK_LIBRARIES "opencv_core;opencv_imgproc;opencv_imgcodecs;opencv_videoio;$<LINK_ONLY:dl>;$<LINK_ONLY:m>;$<LINK_ONLY:log>;$<LINK_ONLY:tbb>;$<LINK_ONLY:ippiw>;$<LINK_ONLY:ippicv>"
-)
-
-# Create imported target opencv_superres
-add_library(opencv_superres STATIC IMPORTED)
-
-set_target_properties(opencv_superres PROPERTIES
-  INTERFACE_LINK_LIBRARIES "opencv_core;opencv_imgproc;opencv_video;opencv_imgcodecs;opencv_videoio;$<LINK_ONLY:dl>;$<LINK_ONLY:m>;$<LINK_ONLY:log>;$<LINK_ONLY:tbb>;$<LINK_ONLY:ippiw>;$<LINK_ONLY:ippicv>"
+  INTERFACE_LINK_LIBRARIES "opencv_core;opencv_imgproc;$<LINK_ONLY:dl>;$<LINK_ONLY:m>;$<LINK_ONLY:log>;$<LINK_ONLY:ippiw>;$<LINK_ONLY:ippicv>;$<LINK_ONLY:libprotobuf>"
 )
 
 # Create imported target opencv_features2d
 add_library(opencv_features2d STATIC IMPORTED)
 
 set_target_properties(opencv_features2d PROPERTIES
-  INTERFACE_LINK_LIBRARIES "opencv_core;opencv_flann;opencv_imgproc;opencv_imgcodecs;opencv_videoio;opencv_highgui;$<LINK_ONLY:dl>;$<LINK_ONLY:m>;$<LINK_ONLY:log>;$<LINK_ONLY:tbb>;$<LINK_ONLY:ippiw>;$<LINK_ONLY:ippicv>"
+  INTERFACE_LINK_LIBRARIES "opencv_core;opencv_flann;opencv_imgproc;$<LINK_ONLY:dl>;$<LINK_ONLY:m>;$<LINK_ONLY:log>;$<LINK_ONLY:ippiw>;$<LINK_ONLY:ippicv>"
+)
+
+# Create imported target opencv_imgcodecs
+add_library(opencv_imgcodecs STATIC IMPORTED)
+
+set_target_properties(opencv_imgcodecs PROPERTIES
+  INTERFACE_LINK_LIBRARIES "opencv_core;opencv_imgproc;$<LINK_ONLY:dl>;$<LINK_ONLY:m>;$<LINK_ONLY:log>;$<LINK_ONLY:ippiw>;$<LINK_ONLY:ippicv>;$<LINK_ONLY:z>;$<LINK_ONLY:libjpeg-turbo>;$<LINK_ONLY:libwebp>;$<LINK_ONLY:libpng>;$<LINK_ONLY:libtiff>;$<LINK_ONLY:libjasper>;$<LINK_ONLY:IlmImf>"
+)
+
+# Create imported target opencv_shape
+add_library(opencv_shape STATIC IMPORTED)
+
+set_target_properties(opencv_shape PROPERTIES
+  INTERFACE_LINK_LIBRARIES "opencv_core;opencv_imgproc;opencv_video;$<LINK_ONLY:dl>;$<LINK_ONLY:m>;$<LINK_ONLY:log>;$<LINK_ONLY:ippiw>;$<LINK_ONLY:ippicv>"
+)
+
+# Create imported target opencv_videoio
+add_library(opencv_videoio STATIC IMPORTED)
+
+set_target_properties(opencv_videoio PROPERTIES
+  INTERFACE_LINK_LIBRARIES "opencv_core;opencv_imgproc;opencv_imgcodecs;$<LINK_ONLY:dl>;$<LINK_ONLY:m>;$<LINK_ONLY:log>;$<LINK_ONLY:ippiw>;$<LINK_ONLY:ippicv>"
 )
 
 # Create imported target opencv_calib3d
 add_library(opencv_calib3d STATIC IMPORTED)
 
 set_target_properties(opencv_calib3d PROPERTIES
-  INTERFACE_LINK_LIBRARIES "opencv_core;opencv_flann;opencv_imgproc;opencv_imgcodecs;opencv_videoio;opencv_highgui;opencv_features2d;$<LINK_ONLY:dl>;$<LINK_ONLY:m>;$<LINK_ONLY:log>;$<LINK_ONLY:tbb>;$<LINK_ONLY:ippiw>;$<LINK_ONLY:ippicv>"
+  INTERFACE_LINK_LIBRARIES "opencv_core;opencv_flann;opencv_imgproc;opencv_features2d;$<LINK_ONLY:dl>;$<LINK_ONLY:m>;$<LINK_ONLY:log>;$<LINK_ONLY:ippiw>;$<LINK_ONLY:ippicv>"
+)
+
+# Create imported target opencv_highgui
+add_library(opencv_highgui STATIC IMPORTED)
+
+set_target_properties(opencv_highgui PROPERTIES
+  INTERFACE_LINK_LIBRARIES "opencv_core;opencv_imgproc;opencv_imgcodecs;opencv_videoio;$<LINK_ONLY:dl>;$<LINK_ONLY:m>;$<LINK_ONLY:log>;$<LINK_ONLY:ippiw>;$<LINK_ONLY:ippicv>"
+)
+
+# Create imported target opencv_objdetect
+add_library(opencv_objdetect STATIC IMPORTED)
+
+set_target_properties(opencv_objdetect PROPERTIES
+  INTERFACE_LINK_LIBRARIES "opencv_core;opencv_flann;opencv_imgproc;opencv_features2d;opencv_calib3d;$<LINK_ONLY:dl>;$<LINK_ONLY:m>;$<LINK_ONLY:log>;$<LINK_ONLY:ippiw>;$<LINK_ONLY:ippicv>;$<LINK_ONLY:quirc>"
+)
+
+# Create imported target opencv_stitching
+add_library(opencv_stitching STATIC IMPORTED)
+
+set_target_properties(opencv_stitching PROPERTIES
+  INTERFACE_LINK_LIBRARIES "opencv_core;opencv_flann;opencv_imgproc;opencv_features2d;opencv_calib3d;$<LINK_ONLY:dl>;$<LINK_ONLY:m>;$<LINK_ONLY:log>;$<LINK_ONLY:ippiw>;$<LINK_ONLY:ippicv>"
+)
+
+# Create imported target opencv_superres
+add_library(opencv_superres STATIC IMPORTED)
+
+set_target_properties(opencv_superres PROPERTIES
+  INTERFACE_LINK_LIBRARIES "opencv_core;opencv_imgproc;opencv_video;opencv_imgcodecs;opencv_videoio;$<LINK_ONLY:dl>;$<LINK_ONLY:m>;$<LINK_ONLY:log>;$<LINK_ONLY:ippiw>;$<LINK_ONLY:ippicv>"
+)
+
+# Create imported target opencv_videostab
+add_library(opencv_videostab STATIC IMPORTED)
+
+set_target_properties(opencv_videostab PROPERTIES
+  INTERFACE_LINK_LIBRARIES "opencv_core;opencv_flann;opencv_imgproc;opencv_photo;opencv_video;opencv_features2d;opencv_imgcodecs;opencv_videoio;opencv_calib3d;$<LINK_ONLY:dl>;$<LINK_ONLY:m>;$<LINK_ONLY:log>;$<LINK_ONLY:ippiw>;$<LINK_ONLY:ippicv>"
 )
 
 # Create imported target opencv_java
@@ -213,20 +230,6 @@ add_library(opencv_java SHARED IMPORTED)
 
 set_target_properties(opencv_java PROPERTIES
   INTERFACE_LINK_LIBRARIES "jnigraphics;log;dl;z"
-)
-
-# Create imported target opencv_stitching
-add_library(opencv_stitching STATIC IMPORTED)
-
-set_target_properties(opencv_stitching PROPERTIES
-  INTERFACE_LINK_LIBRARIES "opencv_core;opencv_flann;opencv_imgproc;opencv_imgcodecs;opencv_videoio;opencv_highgui;opencv_features2d;opencv_calib3d;$<LINK_ONLY:dl>;$<LINK_ONLY:m>;$<LINK_ONLY:log>;$<LINK_ONLY:tbb>;$<LINK_ONLY:ippiw>;$<LINK_ONLY:ippicv>"
-)
-
-# Create imported target opencv_videostab
-add_library(opencv_videostab STATIC IMPORTED)
-
-set_target_properties(opencv_videostab PROPERTIES
-  INTERFACE_LINK_LIBRARIES "opencv_core;opencv_flann;opencv_imgproc;opencv_photo;opencv_video;opencv_imgcodecs;opencv_videoio;opencv_highgui;opencv_features2d;opencv_calib3d;$<LINK_ONLY:dl>;$<LINK_ONLY:m>;$<LINK_ONLY:log>;$<LINK_ONLY:tbb>;$<LINK_ONLY:ippiw>;$<LINK_ONLY:ippicv>"
 )
 
 if(CMAKE_VERSION VERSION_LESS 2.8.12)

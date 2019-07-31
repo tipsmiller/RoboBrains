@@ -287,12 +287,12 @@ element is a structure of 2 integers, followed by a single-precision floating-po
 equivalent notations of the above specification are `iif`, `2i1f` and so forth. Other examples: `u`
 means that the array consists of bytes, and `2d` means the array consists of pairs of doubles.
 
-@see @ref filestorage.cpp
+@see @ref samples/cpp/filestorage.cpp
 */
 
 //! @{
 
-/** @example filestorage.cpp
+/** @example samples/cpp/filestorage.cpp
 A complete example using the FileStorage interface
 */
 
@@ -438,6 +438,8 @@ public:
      * @param name Name of the written object
      * @param val Value of the written object
      */
+    CV_WRAP void write(const String& name, int val);
+    /// @overload
     CV_WRAP void write(const String& name, double val);
     /// @overload
     CV_WRAP void write(const String& name, const String& val);
@@ -540,6 +542,11 @@ public:
     */
     CV_WRAP_AS(at) FileNode operator[](int i) const;
 
+    /** @brief Returns keys of a mapping node.
+    @returns Keys of a mapping node.
+     */
+    CV_WRAP std::vector<String> keys() const;
+
     /** @brief Returns type of the node.
     @returns Type of the node. See FileNode::Type
      */
@@ -590,8 +597,8 @@ public:
     Usually it is more convenient to use operator `>>` instead of this method.
     @param fmt Specification of each array element. See @ref format_spec "format specification"
     @param vec Pointer to the destination array.
-    @param len Number of elements to read. If it is greater than number of remaining elements then all
-    of them will be read.
+    @param len Number of bytes to read (buffer size limit). If it is greater than number of
+               remaining elements then all of them will be read.
      */
     void readRaw( const String& fmt, uchar* vec, size_t len ) const;
 
@@ -661,11 +668,12 @@ public:
     Usually it is more convenient to use operator `>>` instead of this method.
     @param fmt Specification of each array element. See @ref format_spec "format specification"
     @param vec Pointer to the destination array.
-    @param maxCount Number of elements to read. If it is greater than number of remaining elements then
-    all of them will be read.
+    @param len Number of bytes to read (buffer size limit). If it is greater than number of
+               remaining elements then all of them will be read.
+
      */
     FileNodeIterator& readRaw( const String& fmt, uchar* vec,
-                               size_t maxCount=(size_t)INT_MAX );
+                               size_t len=(size_t)INT_MAX );
 
     struct SeqReader
     {

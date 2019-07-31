@@ -6,8 +6,12 @@ package org.opencv.ml;
 import org.opencv.ml.ParamGrid;
 
 // C++: class ParamGrid
-//javadoc: ParamGrid
-
+/**
+ * The structure represents the logarithmic grid range of statmodel parameters.
+ *
+ * It is used for optimizing statmodel accuracy by varying model parameters, the accuracy estimate
+ * being computed by cross-validation.
+ */
 public class ParamGrid {
 
     protected final long nativeObj;
@@ -19,25 +23,49 @@ public class ParamGrid {
     public static ParamGrid __fromPtr__(long addr) { return new ParamGrid(addr); }
 
     //
-    // C++: static Ptr_ParamGrid create(double minVal = 0., double maxVal = 0., double logstep = 1.)
+    // C++: static Ptr_ParamGrid cv::ml::ParamGrid::create(double minVal = 0., double maxVal = 0., double logstep = 1.)
     //
 
-    //javadoc: ParamGrid::create(minVal, maxVal, logstep)
-    public static ParamGrid create(double minVal, double maxVal, double logstep)
-    {
-        
-        ParamGrid retVal = ParamGrid.__fromPtr__(create_0(minVal, maxVal, logstep));
-        
-        return retVal;
+    /**
+     * Creates a ParamGrid Ptr that can be given to the %SVM::trainAuto method
+     *
+     *     @param minVal minimum value of the parameter grid
+     *     @param maxVal maximum value of the parameter grid
+     *     @param logstep Logarithmic step for iterating the statmodel parameter
+     * @return automatically generated
+     */
+    public static ParamGrid create(double minVal, double maxVal, double logstep) {
+        return ParamGrid.__fromPtr__(create_0(minVal, maxVal, logstep));
     }
 
-    //javadoc: ParamGrid::create()
-    public static ParamGrid create()
-    {
-        
-        ParamGrid retVal = ParamGrid.__fromPtr__(create_1());
-        
-        return retVal;
+    /**
+     * Creates a ParamGrid Ptr that can be given to the %SVM::trainAuto method
+     *
+     *     @param minVal minimum value of the parameter grid
+     *     @param maxVal maximum value of the parameter grid
+     * @return automatically generated
+     */
+    public static ParamGrid create(double minVal, double maxVal) {
+        return ParamGrid.__fromPtr__(create_1(minVal, maxVal));
+    }
+
+    /**
+     * Creates a ParamGrid Ptr that can be given to the %SVM::trainAuto method
+     *
+     *     @param minVal minimum value of the parameter grid
+     * @return automatically generated
+     */
+    public static ParamGrid create(double minVal) {
+        return ParamGrid.__fromPtr__(create_2(minVal));
+    }
+
+    /**
+     * Creates a ParamGrid Ptr that can be given to the %SVM::trainAuto method
+     *
+     * @return automatically generated
+     */
+    public static ParamGrid create() {
+        return ParamGrid.__fromPtr__(create_3());
     }
 
 
@@ -45,13 +73,8 @@ public class ParamGrid {
     // C++: double ParamGrid::minVal
     //
 
-    //javadoc: ParamGrid::get_minVal()
-    public  double get_minVal()
-    {
-        
-        double retVal = get_minVal_0(nativeObj);
-        
-        return retVal;
+    public double get_minVal() {
+        return get_minVal_0(nativeObj);
     }
 
 
@@ -59,13 +82,8 @@ public class ParamGrid {
     // C++: void ParamGrid::minVal
     //
 
-    //javadoc: ParamGrid::set_minVal(minVal)
-    public  void set_minVal(double minVal)
-    {
-        
+    public void set_minVal(double minVal) {
         set_minVal_0(nativeObj, minVal);
-        
-        return;
     }
 
 
@@ -73,13 +91,8 @@ public class ParamGrid {
     // C++: double ParamGrid::maxVal
     //
 
-    //javadoc: ParamGrid::get_maxVal()
-    public  double get_maxVal()
-    {
-        
-        double retVal = get_maxVal_0(nativeObj);
-        
-        return retVal;
+    public double get_maxVal() {
+        return get_maxVal_0(nativeObj);
     }
 
 
@@ -87,13 +100,8 @@ public class ParamGrid {
     // C++: void ParamGrid::maxVal
     //
 
-    //javadoc: ParamGrid::set_maxVal(maxVal)
-    public  void set_maxVal(double maxVal)
-    {
-        
+    public void set_maxVal(double maxVal) {
         set_maxVal_0(nativeObj, maxVal);
-        
-        return;
     }
 
 
@@ -101,13 +109,8 @@ public class ParamGrid {
     // C++: double ParamGrid::logStep
     //
 
-    //javadoc: ParamGrid::get_logStep()
-    public  double get_logStep()
-    {
-        
-        double retVal = get_logStep_0(nativeObj);
-        
-        return retVal;
+    public double get_logStep() {
+        return get_logStep_0(nativeObj);
     }
 
 
@@ -115,13 +118,8 @@ public class ParamGrid {
     // C++: void ParamGrid::logStep
     //
 
-    //javadoc: ParamGrid::set_logStep(logStep)
-    public  void set_logStep(double logStep)
-    {
-        
+    public void set_logStep(double logStep) {
         set_logStep_0(nativeObj, logStep);
-        
-        return;
     }
 
 
@@ -132,9 +130,11 @@ public class ParamGrid {
 
 
 
-    // C++: static Ptr_ParamGrid create(double minVal = 0., double maxVal = 0., double logstep = 1.)
+    // C++: static Ptr_ParamGrid cv::ml::ParamGrid::create(double minVal = 0., double maxVal = 0., double logstep = 1.)
     private static native long create_0(double minVal, double maxVal, double logstep);
-    private static native long create_1();
+    private static native long create_1(double minVal, double maxVal);
+    private static native long create_2(double minVal);
+    private static native long create_3();
 
     // C++: double ParamGrid::minVal
     private static native double get_minVal_0(long nativeObj);
