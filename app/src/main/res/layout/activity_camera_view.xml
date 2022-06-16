@@ -6,10 +6,10 @@
     android:layout_height="match_parent"
     tools:context=".CameraViewActivity">
 
-    <org.opencv.android.JavaCamera2View
-        android:id="@+id/javaCameraView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+    <xyz.gmiller.robobrains.CameraView
+        android:id="@+id/cameraView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

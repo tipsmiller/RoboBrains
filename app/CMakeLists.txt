@@ -38,12 +38,12 @@ find_library( # Sets the name of the path variable.
 
 target_link_libraries( # Specifies the target library.
                        native-lib
-
+                       ${OpenCV_LIBRARIES}
                        # Links the target library to the log library
                        # included in the NDK.
                        ${log-lib} )
 
 # set(OpenCV_DIR "opencv")
 message("OpenCV_DIR: " ${OpenCV_DIR})
-find_package(OpenCV 3.4 REQUIRED java)
+find_package(OpenCV 4.6 REQUIRED java)
 target_link_libraries(native-lib ${OpenCV_LIBRARIES})

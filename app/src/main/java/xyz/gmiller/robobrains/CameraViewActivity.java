@@ -1,6 +1,5 @@
 package xyz.gmiller.robobrains;
 
-import android.app.Activity;
 import android.content.Context;
 import android.hardware.usb.UsbManager;
 import android.os.Bundle;
@@ -11,7 +10,7 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import org.opencv.android.BaseLoaderCallback;
-import org.opencv.android.CameraBridgeViewBase;
+import org.opencv.android.CameraActivity;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.core.CvType;
@@ -29,16 +28,18 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import static android.os.Environment.MEDIA_SHARED;
 import static org.opencv.imgcodecs.Imgcodecs.imwrite;
 
-public class CameraViewActivity extends Activity implements CameraBridgeViewBase.CvCameraViewListener2, Arduino.ArduinoListener {
-    private final String TAG = "RoboBrains::CameraView";
+public class CameraViewActivity extends CameraActivity implements CameraView.CvCameraViewListener2, Arduino.ArduinoListener {
+    private static final String TAG = "RoboBrains::CameraView";
 
-    private CameraBridgeViewBase mOpenCvCameraView;
+    private CameraView mOpenCvCameraView;
     Mat mRgba;
     Mat mGray;
     File mCascadeClassifierFile;
@@ -49,33 +50,40 @@ public class CameraViewActivity extends Activity implements CameraBridgeViewBase
     SimpleDateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss-SS", Locale.US);
     Arduino mArduino;
 
-    static {
-        if (!OpenCVLoader.initDebug()) {
-            Log.e("OCVSample::Activity", "Could not initialize local OpenCV Library (statically)");
-        }
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (!isTaskRoot()) {
-            this.finish();
-            return;
-        }
-
         setContentView(R.layout.activity_camera_view);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        mOpenCvCameraView = findViewById(R.id.javaCameraView);
+        mOpenCvCameraView = findViewById(R.id.cameraView);
+        mOpenCvCameraView.setVisibility(CameraView.VISIBLE);
         mOpenCvCameraView.setCvCameraViewListener(this);
-        mOpenCvCameraView.setMaxFrameSize(1920, 1080);
+        mOpenCvCameraView.setMaxFrameSize(800, 400);
+        //mOpenCvCameraView.setMaxFrameSize(1920, 1080);
+        mOpenCvCameraView.enableFpsMeter();
+    }
+
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+        mOpenCvCameraView.disableView();
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
         mOpenCvCameraView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+
+        // load opencv binaries
         if (!OpenCVLoader.initDebug()) {
             Log.d(TAG, "Internal OpenCV library not found. Using OpenCV Manager for initialization");
         } else {
@@ -89,29 +97,14 @@ public class CameraViewActivity extends Activity implements CameraBridgeViewBase
         mArduino.tryConnect();
     }
 
-    @Override
-    public void onPause()
-    {
-        super.onPause();
-    }
-
-    @Override
-    public void onResume()
-    {
-        super.onResume();
-        mOpenCvCameraView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-    }
-
     public void onDestroy() {
-        super.onDestroy();
-        if (mOpenCvCameraView != null)
+        if (mOpenCvCameraView != null) {
             mOpenCvCameraView.disableView();
-        mArduino.destroy();
+        }
+        if (mArduino != null) {
+            mArduino.destroy();
+        }
+        super.onDestroy();
     }
 
     private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
@@ -165,10 +158,13 @@ public class CameraViewActivity extends Activity implements CameraBridgeViewBase
     }
 
     @Override
+    protected List<? extends CameraView> getCameraViewList() {
+        return Collections.singletonList(mOpenCvCameraView);
+    }
+
+    @Override
     public void onCameraViewStarted(int width, int height) {
         Log.i(TAG, String.format("Camera view started: w %s h %s", width, height));
-        mOpenCvCameraView.enableView();
-
         mRgba = new Mat(height, width, CvType.CV_8UC4);
         mGray = new Mat(height, width, CvType.CV_8UC1);
         mObjects = new MatOfRect();
@@ -185,7 +181,7 @@ public class CameraViewActivity extends Activity implements CameraBridgeViewBase
     }
 
     @Override
-    public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
+    public Mat onCameraFrame(CameraView.CvCameraViewFrame inputFrame) {
         Log.i(TAG, "Camera view received frame");
         mRgba = inputFrame.rgba();
         mGray = inputFrame.gray();
