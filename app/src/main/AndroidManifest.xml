@@ -3,11 +3,10 @@
     package="xyz.gmiller.robobrains">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <uses-feature android:name="android.hardware.usb.host" />
-
-    <uses-permission android:name="android.permission.CAMERA" />
-
     <uses-feature
         android:name="android.hardware.camera.full"
         android:required="true" />
@@ -47,6 +46,8 @@
                 android:resource="@xml/device_filter" />
         </activity>
         <activity android:name=".RotationVectorDemo">
+        </activity>
+        <activity android:name=".CameraXPreview">
         </activity>
     </application>
 

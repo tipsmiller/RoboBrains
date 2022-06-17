@@ -21,11 +21,22 @@
         android:id="@+id/goRotationVectorDemo"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:onClick="onClickGoRotationVectorDemo"
-        android:text="Go to Rotation Vector Demo"
-        app:layout_constraintStart_toEndOf="@+id/goCameraView"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:text="Rotation Vector Demo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/goCameraView" />
+
+    <Button
+        android:id="@+id/goCameraXPreview"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:onClick="onClickGoCameraXPreview"
+        android:text="CameraX Preview"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/goRotationVectorDemo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

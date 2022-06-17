@@ -24,4 +24,9 @@ public class MainActivity extends Activity {
         startActivity(intent);
     }
 
+    public void onClickGoCameraXPreview(View view) {
+        Intent intent = new Intent(this, CameraXPreview.class);
+        startActivity(intent);
+    }
+
 }

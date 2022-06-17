@@ -53,9 +53,7 @@ public class CameraViewActivity extends CameraActivity implements CameraView.CvC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_camera_view);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         mOpenCvCameraView = findViewById(R.id.cameraView);
         mOpenCvCameraView.setVisibility(CameraView.VISIBLE);
