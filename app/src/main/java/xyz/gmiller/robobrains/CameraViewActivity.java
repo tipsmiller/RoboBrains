@@ -98,13 +98,13 @@ public class CameraViewActivity extends CameraActivity implements CameraView.CvC
     }
 
     public void onDestroy() {
+        super.onDestroy();
         if (mOpenCvCameraView != null) {
             mOpenCvCameraView.disableView();
         }
         if (mArduino != null) {
             mArduino.destroy();
         }
-        super.onDestroy();
     }
 
     private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
