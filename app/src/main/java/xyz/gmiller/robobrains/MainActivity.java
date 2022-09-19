@@ -29,4 +29,14 @@ public class MainActivity extends Activity {
         startActivity(intent);
     }
 
+    public void onClickGoBillOne(View view) {
+        Intent intent = new Intent(this, BillOneActivity.class);
+        startActivity(intent);
+    }
+
+    public void onClickGoAprilTags(View view) {
+        Intent intent = new Intent(this, ApriltagActivity.class);
+        startActivity(intent);
+    }
+
 }

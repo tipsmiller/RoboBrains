@@ -1,0 +1,30 @@
+apply plugin: 'com.android.library'
+
+
+android {
+    compileSdkVersion 30
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 30
+
+        versionCode 302000
+        versionName '3.2.0'
+
+        // externalNativeBuild {
+        //     cmake {
+        //         arguments "-DCMAKE_BUILD_TYPE=Release", "-DBUILD_SHARED_LIBS=OFF"
+        //     }
+        // }
+    }
+
+    externalNativeBuild {
+        cmake {
+            path 'CMakeLists.txt'
+        }
+    }
+    ndkVersion '20.0.5594570'
+}
+
+dependencies {
+}

@@ -37,4 +37,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/goRotationVectorDemo" />
 
+    <Button
+        android:id="@+id/goBill1"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:onClick="onClickGoBillOne"
+        android:text="Bill 1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/goCameraXPreview" />
+
+    <Button
+        android:id="@+id/goAprilTags"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:onClick="onClickGoAprilTags"
+        android:text="AprilTags"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/goBill1" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

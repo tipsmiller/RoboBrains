@@ -70,6 +70,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     implementation project(':opencv')
+    implementation project(':apriltag')
     implementation 'com.github.felHR85:UsbSerial:4.5.2'
     implementation "androidx.core:core-ktx:1.8.0"
     implementation 'androidx.appcompat:appcompat:1.4.2'

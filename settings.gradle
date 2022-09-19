@@ -1,2 +1,2 @@
-include ':app', ':opencv'
+include ':app', ':opencv', ':apriltag'
 project(':opencv').projectDir = new File('opencv/opencv-4.6.0/sdk')
